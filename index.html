@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>展開図クイズ</title>
+  <meta name="description" content="立方体・直方体の正しい展開図を、折りたたみアニメーションで学ぶ教材です。">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dev2.css">
+</head>
+<body>
+  <a class="skip" href="#app">本文へ移動</a>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">▦</span><span>展開図クイズ</span></div>
+    <div class="quick-controls" aria-label="表示設定">
+      <label><input id="rubyToggle" type="checkbox"> ふりがな</label>
+      <label><input id="soundToggle" type="checkbox" checked> 効果音</label>
+      <button id="fullscreenBtn" class="icon-btn" type="button" aria-label="全画面表示">⛶</button>
+    </div>
+  </header>
+
+  <main id="app" tabindex="-1">
+    <section id="homeScreen" class="screen active home" aria-labelledby="homeTitle">
+      <div class="hero-card">
+        <p class="eyebrow">見て、考えて、たしかめよう</p>
+        <h1 id="homeTitle"><ruby>展開図<rt>てんかいず</rt></ruby>クイズ</h1>
+        <p class="lead"><ruby>完成<rt>かんせい</rt></ruby>した<ruby>立体<rt>りったい</rt></ruby>になる<ruby>展開図<rt>てんかいず</rt></ruby>をえらぼう！</p>
+        <div class="hero-solid" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="home-actions">
+          <button id="startBtn" class="btn primary huge" type="button">スタート <span aria-hidden="true">▶</span></button>
+          <button id="settingsBtn" class="btn secondary huge" type="button">設定 <span aria-hidden="true">⚙</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen" aria-labelledby="settingsTitle">
+      <div class="panel settings-panel">
+        <h1 id="settingsTitle">クイズの設定</h1>
+        <fieldset><legend>問題数</legend><div class="segmented" id="countChoices">
+          <label><input type="radio" name="count" value="5" checked><span>5問</span></label>
+          <label><input type="radio" name="count" value="10"><span>10問</span></label>
+          <label><input type="radio" name="count" value="20"><span>20問</span></label>
+        </div></fieldset>
+        <fieldset><legend>レベル</legend><div class="level-choices">
+          <label><input type="radio" name="level" value="beginner" checked><span><b>初級</b> 立方体のみ</span></label>
+          <label><input type="radio" name="level" value="intermediate"><span><b>中級</b> 直方体のみ</span></label>
+          <label><input type="radio" name="level" value="advanced"><span><b>上級</b> 立方体と直方体</span></label>
+        </div></fieldset>
+        <fieldset><legend>問題中の表示</legend>
+          <label class="switch-row"><span>辺の長さを表示する</span><input id="lengthToggle" type="checkbox" checked></label>
+          <label class="switch-row"><span>面の名前を表示する</span><input id="faceToggle" type="checkbox"></label>
+        </fieldset>
+        <button id="saveSettingsBtn" class="btn primary wide" type="button">この設定で始める</button>
+        <button class="btn text home-btn" type="button">ホームへ戻る</button>
+      </div>
+    </section>
+
+    <section id="quizScreen" class="screen" aria-labelledby="questionHeading">
+      <div class="quiz-head">
+        <div><b id="questionCount">問題 1 / 5</b><span id="correctCount">正解 0</span></div>
+        <button class="btn text home-btn" type="button">ホームへ戻る</button>
+        <div class="progress"><span id="progressBar"></span></div>
+      </div>
+      <div class="solid-wrap">
+        <h1 id="questionHeading">この立体になる展開図はどれ？</h1>
+        <div id="solid" class="solid" aria-label="完成した立体"></div>
+        <div id="dimensions" class="dimensions"></div>
+      </div>
+      <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+      <div id="options" class="options" role="group" aria-label="展開図の選択肢"></div>
+      <div id="animationPanel" class="animation-panel" hidden>
+        <h2 id="animationMessage" class="animation-message"></h2>
+        <div id="foldStage" class="fold-stage" aria-label="展開図を折りたたむアニメーション"></div>
+        <div class="animation-tools">
+          <button id="playBtn" class="btn secondary" type="button">▶ 再生</button>
+          <button id="pauseBtn" class="btn secondary" type="button">Ⅱ 一時停止</button>
+          <button id="resetAnimBtn" class="btn secondary" type="button">↺ 最初に戻る</button>
+          <label>途中位置 <input id="animSlider" type="range" min="0" max="100" value="0"></label>
+        </div>
+        <p id="explanation" class="explanation"></p>
+        <button id="showCorrectBtn" class="btn secondary" type="button" hidden>正しい展開図を見る</button>
+        <button id="nextBtn" class="btn primary" type="button">次の問題</button>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen" aria-labelledby="resultTitle">
+      <div class="panel result-panel">
+        <p class="eyebrow">チャレンジ終了！</p><h1 id="resultTitle">結果</h1>
+        <div id="scoreRing" class="score-ring"><strong id="scorePercent">0%</strong><span>正解率</span></div>
+        <div id="resultStats" class="result-stats"></div><h2 id="evaluation"></h2>
+        <div class="result-actions">
+          <button id="retryBtn" class="btn primary" type="button">もう一度</button>
+          <button id="reviewBtn" class="btn secondary" type="button">間違えた問題だけ復習</button>
+          <button class="btn text home-btn" type="button">ホームへ戻る</button>
+        </div>
+        <p id="reviewDone" class="success-note" hidden>復習できました！</p>
+      </div>
+    </section>
+  </main>
+  <script src="script.js?v=0.1.0-dev3"></script>
+</body>
+</html>
